@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+            <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Video Comel Player</title>
+                        <style>
+                                    /* Reset CSS dasar */
+                                            * {
+                                                            margin: 0;
+                                                                        padding: 0;
+                                                                                    box-sizing: border-box;
+                                            }
+
+                                                    body, html {
+                                                                    width: 100%;
+                                                                                height: 100%;
+                                                                                            overflow: hidden; /* Menghilangkan scrollbar */
+                                                                                                        background-color: #FFB7C5; /* Warna Pink Comel (Cherry Blossom) */
+                                                    }
+
+                                                            /* Container utama agar video tetap di tengah */
+                                                                    .video-container {
+                                                                                    width: 100%;
+                                                                                                height: 100vh;
+                                                                                                            display: flex;
+                                                                                                                        justify-content: center;
+                                                                                                                                    align-items: center;
+                                                                                                                                                position: relative;
+                                                                    }
+
+                                                                            /* Styling Video */
+                                                                                    video {
+                                                                                                    position: absolute;
+                                                                                                                top: 50%;
+                                                                                                                            left: 50%;
+                                                                                                                                        min-width: 100%;
+                                                                                                                                                    min-height: 100%;
+                                                                                                                                                                width: auto;
+                                                                                                                                                                            height: auto;
+                                                                                                                                                                                        /* Agar video menutupi seluruh layar tanpa gepeng (responsive) */
+                                                                                                                                                                                                    object-fit: cover; 
+                                                                                                                                                                                                                transform: translate(-50%, -50%);
+                                                                                                                                                                                                                            z-index: -1;
+                                                                                    }
+                                                                                            
+                                                                                            /* Overlay Pink Tipis (Opsional: Hapus jika ingin warna asli video) */
+                                                                                                    /* Ini memberikan efek filter pink comel pada video */
+                                                                                                            .overlay {
+                                                                                                                            position: absolute;
+                                                                                                                                        top: 0;
+                                                                                                                                                    left: 0;
+                                                                                                                                                                width: 100%;
+                                                                                                                                                                            height: 100%;
+                                                                                                                                                                                        background: rgba(255, 183, 197, 0.1); /* Transparan pink tipis */
+                                                                                                                                                                                                    pointer-events: none;
+                                                                                                            }
+                                                                                                        </style>
+                                                                                                    </head>
+                                                                                                    <body>
+
+                                                                                                            <div class="video-container">
+                                                                                                                        <video autoplay muted loop playsinline>
+                                                                                                                                        <source src="a.mp4" type="video/mp4">
+                                                                                                                                                    Browser kamu tidak support video ini.
+                                                                                                                        </video>
+                                                                                                                                
+                                                                                                                                <div class="overlay"></div>
+                                                                                                                    </div>
+
+                                                                                                                </body>
+                                                                                                                </html>
+                                                                                                            }
+                                                                                    }
+                                                                    }
+                                                    }
+                                            }

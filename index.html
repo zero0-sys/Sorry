@@ -1,77 +1,184 @@
 <!DOCTYPE html>
 <html lang="id">
-    <head>
-            <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Video Comel Player</title>
-                        <style>
-                                    /* Reset CSS dasar */
-                                            * {
-                                                            margin: 0;
-                                                                        padding: 0;
-                                                                                    box-sizing: border-box;
-                                            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video Fullscreen Modern</title>
+    <style>
+        /* Reset CSS */
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #FFB7C5; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-                                                    body, html {
-                                                                    width: 100%;
-                                                                                height: 100%;
-                                                                                            overflow: hidden; /* Menghilangkan scrollbar */
-                                                                                                        background-color: #FFB7C5; /* Warna Pink Comel (Cherry Blossom) */
-                                                    }
+        /* 1. VIDEO FULLSCREEN */
+        #bgVideo {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0; 
+        }
 
-                                                            /* Container utama agar video tetap di tengah */
-                                                                    .video-container {
-                                                                                    width: 100%;
-                                                                                                height: 100vh;
-                                                                                                            display: flex;
-                                                                                                                        justify-content: center;
-                                                                                                                                    align-items: center;
-                                                                                                                                                position: relative;
-                                                                    }
+        /* 2. OVERLAY START */
+        #startOverlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            z-index: 999; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: opacity 0.5s ease;
+        }
 
-                                                                            /* Styling Video */
-                                                                                    video {
-                                                                                                    position: absolute;
-                                                                                                                top: 50%;
-                                                                                                                            left: 50%;
-                                                                                                                                        min-width: 100%;
-                                                                                                                                                    min-height: 100%;
-                                                                                                                                                                width: auto;
-                                                                                                                                                                            height: auto;
-                                                                                                                                                                                        /* Agar video menutupi seluruh layar tanpa gepeng (responsive) */
-                                                                                                                                                                                                    object-fit: cover; 
-                                                                                                                                                                                                                transform: translate(-50%, -50%);
-                                                                                                                                                                                                                            z-index: -1;
-                                                                                    }
-                                                                                            
-                                                                                            /* Overlay Pink Tipis (Opsional: Hapus jika ingin warna asli video) */
-                                                                                                    /* Ini memberikan efek filter pink comel pada video */
-                                                                                                            .overlay {
-                                                                                                                            position: absolute;
-                                                                                                                                        top: 0;
-                                                                                                                                                    left: 0;
-                                                                                                                                                                width: 100%;
-                                                                                                                                                                            height: 100%;
-                                                                                                                                                                                        background: rgba(255, 183, 197, 0.1); /* Transparan pink tipis */
-                                                                                                                                                                                                    pointer-events: none;
-                                                                                                            }
-                                                                                                        </style>
-                                                                                                    </head>
-                                                                                                    <body>
+        .start-text {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            animation: pulse 1.5s infinite;
+        }
 
-                                                                                                            <div class="video-container">
-                                                                                                                        <video autoplay muted loop playsinline>
-                                                                                                                                        <source src="a.mp4" type="video/mp4">
-                                                                                                                                                    Browser kamu tidak support video ini.
-                                                                                                                        </video>
-                                                                                                                                
-                                                                                                                                <div class="overlay"></div>
-                                                                                                                    </div>
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
 
-                                                                                                                </body>
-                                                                                                                </html>
-                                                                                                            }
-                                                                                    }
-                                                                    }
-                                                    }
-                                            }
+        /* 3. TOMBOL EMOJI MODERN */
+        #emojiContainer {
+            position: fixed;
+            bottom: 60px; /* Posisi Tombol */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            opacity: 0; 
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        .emoji-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            width: 90px;
+            height: 90px;
+            font-size: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none;
+        }
+
+        .emoji-btn:active { transform: scale(0.9); }
+
+        .emoji-btn.happy-mode {
+            background: rgba(255, 105, 180, 0.4); 
+            box-shadow: 0 0 40px rgba(255, 105, 180, 0.8);
+            transform: scale(1.2) rotate(360deg); 
+            border-color: rgba(255, 105, 180, 0.9);
+        }
+
+        /* 4. WATERMARK (BARU DITAMBAHKAN) */
+        .watermark {
+            position: fixed;
+            bottom: 15px; /* Jarak dari bawah layar */
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7); /* Putih agak transparan */
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            z-index: 50; /* Di atas video, di bawah overlay */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Bayangan hitam biar terbaca */
+            font-family: monospace; /* Font gaya koding */
+            pointer-events: none; /* Supaya tidak menghalangi klik */
+        }
+
+    </style>
+</head>
+<body>
+
+    <video id="bgVideo" playsinline loop muted autoplay>
+        <source src="b.mp4" type="video/mp4">
+    </video>
+
+    <audio id="bgAudio" loop>
+        <source src="nama-audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="startOverlay">
+        <div class="start-text">
+            Klik Layar Dulu yaa
+        </div>
+    </div>
+
+    <div id="emojiContainer">
+        <button id="emojiBtn" class="emoji-btn">😭</button>
+    </div>
+
+    <div class="watermark">@naufal_shdq</div>
+
+    <script>
+        // --- SETTING WHATSAPP ---
+        const NOMOR_WA = "6283156687953"; 
+        const PESAN_WA = "iya ku maafin"; 
+        // ------------------------
+
+        const video = document.getElementById('bgVideo');
+        const audio = document.getElementById('bgAudio');
+        const overlay = document.getElementById('startOverlay');
+        const emojiContainer = document.getElementById('emojiContainer');
+        const emojiBtn = document.getElementById('emojiBtn');
+        let appStarted = false;
+
+        // FUNGSI MEMULAI APLIKASI
+        overlay.addEventListener('click', () => {
+            if (appStarted) return;
+            appStarted = true;
+
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
+
+            emojiContainer.style.opacity = '1';
+            emojiContainer.style.pointerEvents = 'auto';
+
+            video.muted = false;
+            video.play();
+            audio.play().catch(e => console.log("Audio butuh interaksi"));
+        });
+
+        // LOGIKA TOMBOL
+        emojiBtn.addEventListener('click', () => {
+            
+            emojiBtn.innerHTML = "🥺";
+            emojiBtn.classList.add('happy-mode');
+            
+            if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
+
+            setTimeout(() => {
+                const link = `https://wa.me/${NOMOR_WA}?text=${encodeURIComponent(PESAN_WA)}`;
+                window.location.href = link;
+            }, 1200); 
+        });
+    </script>
+
+</body>
+</html>
